@@ -13,10 +13,10 @@ class MyApp extends StatelessWidget{
       title: "My First Calculator",
       home: Scaffold(
           appBar: AppBar(
-            title: Text("My Calculator"),
+            title: Text("My Flutter Calculator"),
           ),
-          body:  Center(
-            child: Calculator(),
+          body:  Container(
+            child: Calculator()
           )
       ),
     );
