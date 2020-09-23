@@ -18,6 +18,9 @@ class CalculatorState extends State<Calculator>{
   String result = "0";
   String finalResult = "0";
 
+  String currentOperation = "";
+  String oldOperation = "";
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -94,7 +97,9 @@ class CalculatorState extends State<Calculator>{
       container = Container(
         padding: EdgeInsets.all(5),
         child: RaisedButton(
-          onPressed: (){},
+          onPressed: (){
+            calculate(btnText);
+          },
           child: Text(
             btnText,
             style: TextStyle(
@@ -111,7 +116,9 @@ class CalculatorState extends State<Calculator>{
       container = Container(
         padding: EdgeInsets.all(5),
         child: RaisedButton(
-          onPressed: (){},
+          onPressed: (){
+            calculate(btnText);
+          },
           child: Text(
             btnText,
             style: TextStyle(
@@ -127,5 +134,110 @@ class CalculatorState extends State<Calculator>{
     }
     return container ;
   }
+
+  void calculate(txtButton){
+    print(txtButton);
+    if(txtButton == "C"){
+      text = "0";
+      num1 = 0;
+      num2 = 0;
+      result = "0";
+      finalResult = "0";
+      currentOperation = "";
+      oldOperation = "";
+    }else if (currentOperation == "=" && txtButton == "="){
+      switch(currentOperation){
+        case "+":
+          finalResult = add();
+          break;
+        case "-":
+          finalResult = sub();
+          break;
+        case "x":
+          finalResult = mult();
+          break;
+        case "/":
+          finalResult = div();
+          break;
+        case "%":
+          finalResult = percent();
+          break;
+      }
+      num1 = 0;
+      num2 = 0;
+    } else if (txtButton=="+"||txtButton=="-"||txtButton=="x"||txtButton=="/"||txtButton=="%"||txtButton=="="){
+      if(num1==0){
+        num1 = double.parse(result);
+      }else {
+        num2 = double.parse(result);
+      }
+      switch(currentOperation){
+        case "+":
+          finalResult = add();
+          break;
+        case "-":
+          finalResult = sub();
+          break;
+        case "x":
+          finalResult = mult();
+          break;
+        case "/":
+          finalResult = div();
+          break;
+        case "%":
+          finalResult = percent();
+          break;
+      }
+      result = "";
+      currentOperation = txtButton;
+      oldOperation = currentOperation;
+    }else if (finalResult == "0" && txtButton != "." && txtButton != "+/-") {
+      result = txtButton;
+      finalResult = result;
+    }else if (finalResult.contains(".") && txtButton == "."){
+      finalResult = result;
+    }else if (txtButton == "+/-"){
+      result.startsWith("-")?result=result.substring(1):result="-"+result;
+      finalResult = result;
+    } else {
+      result = result + txtButton;
+      finalResult = result;
+    }
+    setState(() {
+      text = finalResult;
+    });
+  }
+
+  String add(){
+    double dResult = num1 + num2;
+    result = dResult.toStringAsFixed(dResult.truncateToDouble() == dResult ? 0 : 2);
+    //num1 = double.parse(result);
+    return result;
+  }
+  String sub(){
+    double dResult = num1 - num2;
+    result = dResult.toStringAsFixed(dResult.truncateToDouble() == dResult ? 0 : 2);
+    //num1 = double.parse(result);
+    return result;
+  }
+  String mult(){
+    double dResult = num1 * num2;
+    result = dResult.toStringAsFixed(dResult.truncateToDouble() == dResult ? 0 : 2);
+    //num1 = double.parse(result);
+    return result;
+  }
+  String div(){
+    double dResult = num1 / num2;
+    result = dResult.toStringAsFixed(dResult.truncateToDouble() == dResult ? 0 : 2);
+    //num1 = double.parse(result);
+    return result;
+  }
+  String percent(){
+    double dResult = (num2/num1)*100;
+    result = dResult.toStringAsFixed(dResult.truncateToDouble() == dResult ? 0 : 2);
+    //num1 = double.parse(result);
+    return result+"%";
+  }
+
 
 }
